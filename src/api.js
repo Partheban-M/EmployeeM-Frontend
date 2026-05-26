@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://employeemanagementapi-2w7e.onrender.com/",
+  baseURL: "http://localhost:5243/api",
 });
 
 API.interceptors.request.use((config) => {
