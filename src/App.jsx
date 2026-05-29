@@ -1,23 +1,44 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import Login from "./pages/Login";
 import Employees from "./pages/Employees";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   const token = localStorage.getItem("token");
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/"
+            element={<Navigate to={token ? "/dashboard" : "/login"} />}
+          />
 
-        <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login />} />
 
-        <Route
-          path="/employees"
-          element={token ? <Employees /> : <Navigate to="/login" />}
-        />
-      </Routes>
-    </BrowserRouter>
+          <Route
+            path="/dashboard"
+            element={token ? <Dashboard /> : <Navigate to="/login" />}
+          />
+
+          <Route
+            path="/employees"
+            element={token ? <Employees /> : <Navigate to="/login" />}
+          />
+
+          <Route
+            path="*"
+            element={<Navigate to={token ? "/dashboard" : "/login"} />}
+          />
+        </Routes>
+      </BrowserRouter>
+
+      <ToastContainer position="top-right" autoClose={2000} />
+    </>
   );
 }
 
