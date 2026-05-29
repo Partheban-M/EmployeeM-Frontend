@@ -7,47 +7,72 @@ function Login() {
         password: "",
     });
 
+    const [loading, setLoading] = useState(false);
+
     const login = async (e) => {
         e.preventDefault();
 
         try {
-            const response = await API.post("/Auth/login", loginData);
+            setLoading(true);
 
-            console.log(response.data);
+            const response = await API.post("/Auth/login", loginData);
 
             localStorage.setItem("token", response.data.token);
 
             window.location.href = "/employees";
         } catch (error) {
-            console.log(error);
-            alert("Login failed. Check username/password or backend.");
+            alert("Invalid username or password");
+        } finally {
+            setLoading(false);
         }
     };
+
     return (
-        <div>
-            <h2>Login</h2>
+        <div className="login-page">
+            <div className="login-card">
+                <div className="login-header">
+                    <h1>Employee Management</h1>
+                    <p>Professional Admin Portal</p>
+                </div>
 
-            <form onSubmit={login}>
-                <input
-                    type="text"
-                    placeholder="Username"
-                    value={loginData.username}
-                    onChange={(e) =>
-                        setLoginData({ ...loginData, username: e.target.value })
-                    }
-                />
+                <form onSubmit={login} className="login-form">
+                    <div className="input-group">
+                        <label>Username</label>
 
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={loginData.password}
-                    onChange={(e) =>
-                        setLoginData({ ...loginData, password: e.target.value })
-                    }
-                />
+                        <input
+                            type="text"
+                            placeholder="Enter username"
+                            value={loginData.username}
+                            onChange={(e) =>
+                                setLoginData({
+                                    ...loginData,
+                                    username: e.target.value,
+                                })
+                            }
+                        />
+                    </div>
 
-                <button type="submit">Login</button>
-            </form>
+                    <div className="input-group">
+                        <label>Password</label>
+
+                        <input
+                            type="password"
+                            placeholder="Enter password"
+                            value={loginData.password}
+                            onChange={(e) =>
+                                setLoginData({
+                                    ...loginData,
+                                    password: e.target.value,
+                                })
+                            }
+                        />
+                    </div>
+
+                    <button type="submit" className="login-btn">
+                        {loading ? "Logging in..." : "Login"}
+                    </button>
+                </form>
+            </div>
         </div>
     );
 }
